@@ -1,9 +1,9 @@
 
 from django.contrib import admin
-from .models import finded_rooms
+from .models import getroom
 from leaflet.admin import LeafletGeoAdmin
 # Register your models here.
-class roomsAdmin(LeafletGeoAdmin):
- list_display=('name','koordinate','room_rate' ,'des','des')    
-admin.site.register(finded_rooms,roomsAdmin)
+class getroomAdmin(LeafletGeoAdmin):
+ list_display=('namee','koordinatee' ,'phnumm','flooorr','roomsnumm','roomratee')#these things will be shown at /admin section    
+admin.site.register(getroom,getroomAdmin)
 
