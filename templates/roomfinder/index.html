@@ -66,9 +66,10 @@
     function our_layers(map, options) {
       var datasets = new L.GeoJSON.AJAX("{% url 'roomsfound' %}", { //where district is name for shapefile datasets
         onEachFeature: function (feature, layer) {
-          layer.bindPopup( 
-          `Place Name: ${feature.properties.name}<br>Room_rate:${feature.properties.room_rate}<br>Description:  ${feature.properties.des}`
-          );
+          //layer.bindPopup( 
+          //`Place Name: ${feature.properties.name}<br>Room_rate:${feature.properties.room_rate}<br>Description:  ${feature.properties.des}`
+          //);
+          layer.bindPopup('<p>Placename:'+feature.properties.namee+'<br>Flooravailable:'+feature.properties.flooorr+'<br>No of rooms:'+feature.properties.roomsnumm+'<br>Roomrate:'+feature.properties.roomratee+'</p>');
           layer.on('click', markerOnClick)
         }
       });
