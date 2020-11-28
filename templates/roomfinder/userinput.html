@@ -1,0 +1,164 @@
+{% load static%}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Addrooms</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <!--Leaflet and circleclusterMarker  and css and js links respectively,but leaflet link should be ahead than circleclusterMarker-->
+  <link rel="stylesheet" type="text/css" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+
+
+  <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>
+  <script type='text/javascript' src='http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js'></script>
+
+
+  <!--To load shapefile from database-->
+  <script src="{% static 'leaflet.ajax.js' %}"></script>
+
+  <!--To load css file-->
+  <style>
+    .honeContact {
+      text-align: center;
+    }
+
+    .contactContain {
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      padding: 20px;
+      width: 40%;
+      margin: 0 auto;
+      box-sizing: border-box;
+      border: 2px solid rgba(142, 188, 226, 0.877);
+    }
+
+    input[type=text] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid rgba(55, 199, 192, 0.863);
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-top: 6px;
+      margin-bottom: 16px;
+      resize: vertical;
+    }
+
+
+    input[type=number] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-top: 6px;
+      margin-bottom: 16px;
+      resize: vertical;
+    }
+
+    input[type=submit] {
+      background-color: #131413;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+      background-color: #afb4af;
+      color: rgb(0, 0, 0);
+    }
+
+    @media screen and (max-width: 600px) {
+      .contactContain {
+        width: 90%;
+        box-sizing: border-box;
+        border: 2px solid rgb(69, 151, 206);
+        margin: 0 auto;
+      }
+
+      .honeContact {
+        text-align: center;
+      }
+    }
+
+    @media screen and (max-width: 295px) {
+      .contactContain {
+        width: 90%;
+        box-sizing: border-box;
+        border: 2px solid rgb(69, 151, 206);
+        margin: 0 auto;
+      }
+
+    }
+  </style>
+  <!--To load jquery-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <!-- start of userinput form-->
+  <div id="contact">
+    <h3 style="font-family: 'Times New Roman', Times, serif;" class="honeContact">Enter room details</h3>
+
+    <div class="contactContain">
+      <form action="userinput" method='POST'>
+        <!-- (on pressing submit button it hits userinput path of urls.py of roomfinder) and here name will be used to fetch value later in views.py-->
+        {% csrf_token%}
+        <label for="fname">Placename</label><!-- here name='' value must be same as fields name in models.py-->
+        <input type="text" name="namee" placeholder="Enter place name" required><br>
+
+        <label for="formGroupExampleInput">Location</label>
+        <div id='map' style="height: 400px"></div>
+        <input id="coordinates" name="koordinatee" class="form-control" value="" required><br>
+
+        <label for="fname">Phonenumber</label>
+        <input type="number" name="phnumm" placeholder="Enter phone number" required><br>
+
+        <label for="fname">Which floor?</label><!-- here name='' value must be same as fields name in models.py-->
+        <input type="text" name="flooorr" placeholder="Example first" required><br>
+
+        <label for="fname">No of rooms</label>
+        <input type="number" name="roomsnumm" placeholder="example 4" required><br>
+
+        <label for="fname">Roomrate</label>
+        <input type="number" name="roomratee" placeholder="Enter rent rate" required><br>
+
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+  </div><!-- end of class contact-->
+
+  <script>
+    $(document).ready(function () {
+      let map = L.map('map', {
+        center: [27.7172, 85.3240],  //map is zoomed directly to given  cordinate [28.394, 84.1240]
+        zoom: 12                     //this is cool hai guys
+      });
+      L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', //osm tile layer and copyright are generated
+        maxZoom: 18,
+        id: 'mapbox.streets',
+
+      }).addTo(map);
+
+      function onMapClick(e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+        if (typeof marker != 'undefined') {
+          map.removeLayer(marker);  // delete previous marker
+          marker = L.marker([lat, lng]).addTo(map);  // add new marker
+        }
+        else {
+          marker = L.marker([lat, lng]).addTo(map);  // add new marker
+        }
+        $('#coordinates').val(lng + ',' + lat)
+      }
+      map.on('click', onMapClick);
+    });
+  </script>
+</body>
+
+</html>
